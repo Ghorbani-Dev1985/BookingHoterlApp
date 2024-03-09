@@ -1,15 +1,23 @@
 import React, { useState } from 'react'
-import { Add, CalendarMonth, FmdGood, Remove, Search } from '@mui/icons-material'
+import { Add, CalendarMonth, FmdGood, RadioButtonChecked, Remove, Search } from '@mui/icons-material'
 import { Divider } from '@mui/material'
 
 const Header = () => {
     const [destination, setDestination] = useState('')
     const [openOption, setOpenOption] = useState(false)
     const [options , setOptions] = useState({
-        adult: 1,
-        children: 0,
-        room: 1
+        Adult: 1,
+        Children: 0,
+        Room: 1
     })
+    const HandleOption = (name , operation) => {
+        setOptions((prev) => {
+            return {
+                ...prev,
+                [name] : operation === 'inc' ? options[name] + 1 : options[name] - 1
+            }
+        })
+    }
   return (
     <header>
         <div className='container'>
@@ -30,10 +38,10 @@ const Header = () => {
              </div>
              {/* Drop Down */}
              <div className='flex-center h-11 gap-2 relative cursor-pointer'>
-               <div onClick={() => setOpenOption(!openOption)} > 1 adult &bull; 2 children &bull; 1 room</div>
+               <div className='flex-center gap-1' onClick={() => setOpenOption(!openOption)} > <span className='text-emerald-500'>{options.Adult}</span> Adult <RadioButtonChecked className='size-4'/> <span className='text-emerald-500'>{options.Children}</span> Children <RadioButtonChecked className='size-4'/> <span className='text-emerald-500'>{options.Room}</span> Room</div>
                  {
                     openOption && 
-                   <GuestOptionList options={options}/>
+                   <GuestOptionList options={options} HandleOption={HandleOption}/>
                  }
                 <Divider orientation="vertical" className='border-gray-600' variant="middle" flexItem /> 
              </div>
@@ -51,27 +59,27 @@ const Header = () => {
 
 export default Header
 
-function GuestOptionList(){
+function GuestOptionList({options , HandleOption}){
     return(
     <div className='w-full absolute top-12 bg-slate-800 border border-slate-600 p-2 rounded-lg'>
         <div className='flex flex-col gap-5'>
-          <OptionItem />
-          <OptionItem />
-          <OptionItem />
+          <OptionItem type='Adult' options={options} minLimit={1} HandleOption={HandleOption}/>
+          <OptionItem type='Children' options={options} minLimit={0} HandleOption={HandleOption}/>
+          <OptionItem type='Room' options={options} minLimit={1} HandleOption={HandleOption}/>
         </div>
    
 </div>
     )
 }
 
-function OptionItem(){
+function OptionItem({options , type , minLimit , HandleOption}){
     return(
     <div className='flex-between'>
-            <span className='flex flex-1'>Adult</span>
+            <span className='flex flex-1'>{type}</span>
             <div className='flex-center'>
-              <button className='bg-white/90 flex-center rounded-lg size-6 text-gray-900'><Remove className='size-4'/></button>
-              <span className='px-2'>1</span>
-              <button className='bg-white/90 flex-center rounded-lg size-6 text-gray-900'><Add className='size-4'/></button>
+              <button onClick={() => HandleOption(type , 'dec')} disabled={options[type] <= minLimit} className='bg-white/90 disabled:cursor-not-allowed disabled:opacity-30 flex-center rounded-lg size-6 text-gray-900'><Remove className='size-4'/></button>
+              <span className='px-2'>{options[type]}</span>
+              <button onClick={() => HandleOption(type , 'inc')} className='bg-white/90 flex-center rounded-lg size-6 text-gray-900'><Add className='size-4'/></button>
             </div>
           </div>
     )
