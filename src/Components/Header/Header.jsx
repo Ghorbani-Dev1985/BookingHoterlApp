@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Add, CalendarMonth, FmdGood, RadioButtonChecked, Remove, Search } from '@mui/icons-material'
 import { Divider } from '@mui/material'
+import useOutsideClick from '../../Hooks/useOutsideClick'
 
 const Header = () => {
     const [destination, setDestination] = useState('')
@@ -38,10 +39,10 @@ const Header = () => {
              </div>
              {/* Drop Down */}
              <div className='flex-center h-11 gap-2 relative cursor-pointer'>
-               <div className='flex-center gap-1' onClick={() => setOpenOption(!openOption)} > <span className='text-emerald-500'>{options.Adult}</span> Adult <RadioButtonChecked className='size-4'/> <span className='text-emerald-500'>{options.Children}</span> Children <RadioButtonChecked className='size-4'/> <span className='text-emerald-500'>{options.Room}</span> Room</div>
+               <div id="OptionDropdown" className='flex-center gap-1' onClick={() => setOpenOption(!openOption)} > <span className='text-emerald-500'>{options.Adult}</span> Adult <RadioButtonChecked className='size-4'/> <span className='text-emerald-500'>{options.Children}</span> Children <RadioButtonChecked className='size-4'/> <span className='text-emerald-500'>{options.Room}</span> Room</div>
                  {
                     openOption && 
-                   <GuestOptionList options={options} HandleOption={HandleOption}/>
+                   <GuestOptionList options={options} setOpenOption={setOpenOption} HandleOption={HandleOption}/>
                  }
                 <Divider orientation="vertical" className='border-gray-600' variant="middle" flexItem /> 
              </div>
@@ -59,10 +60,12 @@ const Header = () => {
 
 export default Header
 
-function GuestOptionList({options , HandleOption}){
+function GuestOptionList({options , HandleOption , setOpenOption}){
+    const optionsRef = useRef()
+    useOutsideClick(optionsRef, "OptionDropdown" , () => setOpenOption(false))
     return(
     <div className='w-full absolute top-12 bg-slate-800 border border-slate-600 p-2 rounded-lg'>
-        <div className='flex flex-col gap-5'>
+        <div ref={optionsRef} className='flex flex-col gap-5'>
           <OptionItem type='Adult' options={options} minLimit={1} HandleOption={HandleOption}/>
           <OptionItem type='Children' options={options} minLimit={0} HandleOption={HandleOption}/>
           <OptionItem type='Room' options={options} minLimit={1} HandleOption={HandleOption}/>
