@@ -16,13 +16,13 @@ import { format } from "date-fns";
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 
 const Header = () => {
-  const [destination, setDestination] = useState("");
+  const [searchParams , setSearchParams] = useSearchParams()
+  const [destination, setDestination] = useState(searchParams.get("destination") || "");
   const [openOption, setOpenOption] = useState(false);
   const [openDate, setOpenDate] = useState(false);
   const datePicker = useRef();
   useOutsideClick(datePicker, "DatePicker", () => setOpenDate(false));
   const navigate = useNavigate()
-  const [searchParams , setSearchParams] = useSearchParams()
   const [options, setOptions] = useState({
     Adult: 1,
     Children: 0,

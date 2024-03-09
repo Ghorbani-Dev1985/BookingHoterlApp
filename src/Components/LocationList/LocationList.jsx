@@ -48,7 +48,7 @@ const LocationList = () => {
                           {smart_location}
                         </p>
                         <div className="flex items-center gap-2">
-                          <h5 className="flex items-center mb-2 text-2xl font-bold tracking-tight text-white">
+                          <h5 className="flex items-center mb-2 text-xl font-bold tracking-tight text-white">
                             <Euro />
                             {price}
                           </h5>
