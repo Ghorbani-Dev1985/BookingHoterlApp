@@ -1,9 +1,15 @@
 import React, { useState } from 'react'
-import { CalendarMonth, FmdGood, Search } from '@mui/icons-material'
+import { Add, CalendarMonth, FmdGood, Remove, Search } from '@mui/icons-material'
 import { Divider } from '@mui/material'
 
 const Header = () => {
     const [destination, setDestination] = useState('')
+    const [openOption, setOpenOption] = useState(false)
+    const [options , setOptions] = useState({
+        adult: 1,
+        children: 0,
+        room: 1
+    })
   return (
     <header>
         <div className='container'>
@@ -23,8 +29,12 @@ const Header = () => {
              <Divider orientation="vertical" className='border-gray-600' variant="middle" flexItem /> 
              </div>
              {/* Drop Down */}
-             <div className='flex-center h-11 gap-2'>
-               <p> 1 adult &bull; 2 children &bull; 1 room</p>
+             <div className='flex-center h-11 gap-2 relative cursor-pointer'>
+               <div onClick={() => setOpenOption(!openOption)} > 1 adult &bull; 2 children &bull; 1 room</div>
+                 {
+                    openOption && 
+                   <GuestOptionList options={options}/>
+                 }
                 <Divider orientation="vertical" className='border-gray-600' variant="middle" flexItem /> 
              </div>
              {/* Search Btn */}
@@ -40,3 +50,29 @@ const Header = () => {
 }
 
 export default Header
+
+function GuestOptionList(){
+    return(
+    <div className='w-full absolute top-12 bg-slate-800 border border-slate-600 p-2 rounded-lg'>
+        <div className='flex flex-col gap-5'>
+          <OptionItem />
+          <OptionItem />
+          <OptionItem />
+        </div>
+   
+</div>
+    )
+}
+
+function OptionItem(){
+    return(
+    <div className='flex-between'>
+            <span className='flex flex-1'>Adult</span>
+            <div className='flex-center'>
+              <button className='bg-white/90 flex-center rounded-lg size-6 text-gray-900'><Remove className='size-4'/></button>
+              <span className='px-2'>1</span>
+              <button className='bg-white/90 flex-center rounded-lg size-6 text-gray-900'><Add className='size-4'/></button>
+            </div>
+          </div>
+    )
+}
