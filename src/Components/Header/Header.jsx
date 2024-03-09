@@ -2,6 +2,10 @@ import React, { useRef, useState } from 'react'
 import { Add, CalendarMonth, FmdGood, RadioButtonChecked, Remove, Search } from '@mui/icons-material'
 import { Divider } from '@mui/material'
 import useOutsideClick from '../../Hooks/useOutsideClick'
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { DateRange } from 'react-date-range';
+import { format } from 'date-fns';
 
 const Header = () => {
     const [destination, setDestination] = useState('')
@@ -11,6 +15,14 @@ const Header = () => {
         Children: 0,
         Room: 1
     })
+    const [date, setDate] = useState([
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: 'selection',
+        },
+      ]);
+      const [openDate, setOpenDate] = useState(false)
     const HandleOption = (name , operation) => {
         setOptions((prev) => {
             return {
@@ -19,6 +31,8 @@ const Header = () => {
             }
         })
     }
+    const datePicker = useRef()
+    useOutsideClick(datePicker, "DatePicker" , () => setOpenDate(false))
   return (
     <header>
         <div className='container'>
@@ -30,11 +44,21 @@ const Header = () => {
                 <Divider orientation="vertical" className='border-gray-600' variant="middle" flexItem />
              </div>
              {/* Date Picker */}
-             <div className='flex-between h-11 gap-2'>
+             <div id="DatePicker" ref={datePicker} className='flex-between h-11 gap-2 relative'>
                 <CalendarMonth className='text-blue-400'/>
-                <p>
-                    2024-01-01
+                <p onClick={() => setOpenDate(!openDate)}>
+                    {`${format(date[0].startDate , "MM/dd/yyyy")} to ${format(date[0].endDate , "MM/dd/yyyy")}`}
                 </p>
+                {
+                    openDate && <DateRange
+                    editableDateInputs={true}
+                    onChange={item => setDate([item.selection])}
+                    moveRangeOnFirstSelection={true}
+                    ranges={date}
+                    minDate={new Date()}
+                    className='absolute top-12 bg-slate-200 border border-slate-600 p-2 rounded-lg'
+                    />
+                }
              <Divider orientation="vertical" className='border-gray-600' variant="middle" flexItem /> 
              </div>
              {/* Drop Down */}
