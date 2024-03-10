@@ -20,7 +20,7 @@ useEffect(()=>{
 },[geoLocationPosition])
   return (
     <section className='overflow-y-scroll h-full min-h-screen relative z-10'>
-         <MapContainer className='h-full relative z-10' center={mapCenter} zoom={13} scrollWheelZoom={true}>
+         <MapContainer className='h-full relative z-10' center={mapCenter} zoom={6} scrollWheelZoom={true}>
     <button onClick={getPosition} className='bg-orange-400 min-w-36 h-10 font-bold absolute top-3 left-12 z-[1000] px-2 py-1 rounded-lg'>
         {isLoadingPosition ? <CircularProgress className='text-white !size-6'/> : "Use Your Location"}
     </button>
