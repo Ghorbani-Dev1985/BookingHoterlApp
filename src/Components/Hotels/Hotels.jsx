@@ -6,7 +6,7 @@ import { Divider } from "@mui/material";
 import { useHotels } from "../Context/HotelsProvider";
 
 const Hotels = () => {
-  const {isLoading , hotels} = useHotels()
+  const {isLoading , hotels , currentHotel} = useHotels()
   return isLoading ? (
     <LocationSearchListLoading listsToRender={hotels.length} />
   ) : (
@@ -17,7 +17,7 @@ const Hotels = () => {
     hotels.map(({ id, medium_url, smart_location, name, latitude , longitude , price}) => {
         return (
         <React.Fragment key={id}>
-          <SingleHotelCard id={id} medium_url={medium_url} smart_location={smart_location} name={name} latitude={latitude} longitude={longitude} price={price}/>
+          <SingleHotelCard id={id} currentHotel={currentHotel} medium_url={medium_url} smart_location={smart_location} name={name} latitude={latitude} longitude={longitude} price={price}/>
         </React.Fragment>
       );
     })
@@ -29,11 +29,11 @@ const Hotels = () => {
 export default Hotels;
 
 
-const SingleHotelCard = ({id , latitude , longitude , medium_url , name , smart_location , price}) => {
+const SingleHotelCard = ({id , latitude , longitude , medium_url , name , smart_location , price , currentHotel}) => {
   return(
     <Link
     to={`/hotels/${id}?lat=${latitude}&lng=${longitude}`}
-    className="flex flex-col items-center border rounded-lg shadow md:flex-row md:max-w-xl border-gray-700 bg-gray-800 hover:bg-gray-700"
+    className={`${id === currentHotel?.id ? "border-emerald-500" : "border-gray-700"} flex flex-col items-center border rounded-lg shadow md:flex-row md:max-w-xl  bg-gray-800 hover:bg-gray-700`}
     >
     <img
       className="object-cover w-full rounded-t-lg h-full md:w-48 md:rounded-none md:rounded-s-lg"
