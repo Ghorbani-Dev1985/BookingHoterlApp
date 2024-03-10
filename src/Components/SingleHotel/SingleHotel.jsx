@@ -17,7 +17,7 @@ const {hotelID, medium_url, smart_location, name, latitude , longitude , price} 
         <LocationSearchListLoading listsToRender={1} />
       ) : (
         <>
-              <SingleHotelCard id={hotelID} currentHotel={currentHotel} medium_url={medium_url} smart_location={smart_location} name={name} latitude={latitude} longitude={longitude} price={price}/>
+              <SingleHotelCard id={hotelID} current={currentHotel} medium_url={medium_url} smart_location={smart_location} name={name} latitude={latitude} longitude={longitude} price={price}/>
         </>
       )
   )

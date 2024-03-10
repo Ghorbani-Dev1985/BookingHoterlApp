@@ -8,7 +8,7 @@ const BookmarkContext = createContext()
 const BookmarkProvider = ({children}) => {
      const [currentBookmark , setCurrentBookmark] = useState("")
     const [isLoadingCurrentBookmark , setIsLoadingCurrentBookmark] = useState(false)
-    const { data: bookmarks , isLoading } = useFetch("bookmark", '');
+    const { data: bookmarks , isLoading } = useFetch("bookmarks", '');
     async function getBookmark(id) {
       setIsLoadingCurrentBookmark(true)
         const getHotelData = await ApiRequest(`bookmark/${id}`)
