@@ -11,7 +11,8 @@ const BookmarkProvider = ({children}) => {
     const { data: bookmarks , isLoading } = useFetch("bookmarks", '');
     async function getBookmark(id) {
       setIsLoadingCurrentBookmark(true)
-        const getHotelData = await ApiRequest(`bookmark/${id}`)
+      setCurrentBookmark("")
+        const getHotelData = await ApiRequest(`bookmarks/${id}`)
         .then(response => {
           setCurrentBookmark(response.data)
           setIsLoadingCurrentBookmark(false)

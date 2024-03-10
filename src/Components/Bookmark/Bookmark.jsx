@@ -16,11 +16,11 @@ const Bookmark = () => {
     <h2>Your Bookmark <span className="flex-centre bg-emerald-500 px-2 py-1 rounded-lg ml-2">{bookmarks.length}</span></h2>
     <Divider className="border-gray-600"/>
     {
-    bookmarks.map(({ id,  host_location, cityName, latitude , longitude , countryCode , currentBookmark}) => {
+    bookmarks.map(({ id,  host_location, cityName, latitude , longitude , countryCode }) => {
         return (
         <React.Fragment key={id}>
-         <Link to={`${id}?lat=${latitude}?lng=${longitude}`}
-    className="border-gray-700 flex flex-col items-center border rounded-lg shadow md:flex-row md:max-w-xl  bg-gray-800 hover:bg-gray-700"
+         <Link to={`${id}?lat=${latitude}&lng=${longitude}`}
+    className={`${id === currentBookmark.id ? "border-emerald-500" : "border-gray-700"} flex flex-col items-center border rounded-lg shadow md:flex-row md:max-w-xl  bg-gray-800 hover:bg-gray-700`}
     >
     <div className="flex flex-col justify-between p-4 leading-normal">
       <h5 className="flex-center gap-2 mb-2 text-xl font-bold tracking-tight text-white">
