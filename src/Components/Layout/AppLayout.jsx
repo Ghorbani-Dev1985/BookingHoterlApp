@@ -1,5 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
+import Map from '../Map/Map'
 
 const AppLayout = () => {
   return (
@@ -9,7 +10,7 @@ const AppLayout = () => {
               <Outlet />
              </div>
              <aside className='col-span-12 md:col-span-7'>
-cc
+               <Map />
              </aside>
         </div> 
     </section>
