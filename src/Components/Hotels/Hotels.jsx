@@ -1,27 +1,21 @@
 import React from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import useFetch from "../../Hooks/useFetch";
+import { Link } from "react-router-dom";
 import LocationSearchListLoading from "../../Components/Loading/LocationSearchListLoading";
 import { Euro } from "@mui/icons-material";
 import { Divider } from "@mui/material";
+import { useHotels } from "../Context/HotelsProvider";
 
 const Hotels = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const destination = searchParams.get("destination");
-  const room = JSON.parse(searchParams.get("options"))?.room;
-  const { data, isLoading } = useFetch(
-    "hotels",
-    `q=${destination || ""}&accommodates_gte=${room || 1}`
-  );
-  // name_like , host_location_like
+  const {isLoading , hotels} = useHotels()
+  console.log(hotels)
   return isLoading ? (
-    <LocationSearchListLoading listsToRender={data.length} />
+    <LocationSearchListLoading listsToRender={hotels.length} />
   ) : (
     <>
-    <h2>Search Result <span className="flex-centre bg-emerald-500 px-2 py-1 rounded-lg ml-2">{data.length}</span></h2>
+    <h2>Search Result <span className="flex-centre bg-emerald-500 px-2 py-1 rounded-lg ml-2">{hotels.length}</span></h2>
     <Divider className="border-gray-600"/>
     {
-    data.map(({ id, medium_url, smart_location, name, latitude , longitude , price}) => {
+    hotels.map(({ id, medium_url, smart_location, name, latitude , longitude , price}) => {
         return (
         <React.Fragment key={id}>
           <Link
