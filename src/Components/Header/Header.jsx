@@ -96,7 +96,7 @@ const Header = () => {
                 moveRangeOnFirstSelection={true}
                 ranges={date}
                 minDate={new Date()}
-                className="absolute top-12 bg-slate-200 border border-slate-600 p-2 rounded-lg"
+                className="absolute top-12 z-20 bg-slate-200 border border-slate-600 p-2 rounded-lg"
               />
             )}
             <Divider
@@ -153,7 +153,7 @@ function GuestOptionList({ options, HandleOption, setOpenOption }) {
   const optionsRef = useRef();
   useOutsideClick(optionsRef, "OptionDropdown", () => setOpenOption(false));
   return (
-    <div className="w-full absolute top-12 bg-slate-800 border border-slate-600 p-2 rounded-lg">
+    <div className="w-full absolute z-20 top-12 bg-slate-800 border border-slate-600 p-2 rounded-lg">
       <div ref={optionsRef} className="flex flex-col gap-5">
         <OptionItem
           type="Adult"

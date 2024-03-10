@@ -19,7 +19,7 @@ const Hotels = () => {
         return (
         <React.Fragment key={id}>
           <Link
-            to={`/hotels/${id}?lat=${latitude}?lng=${longitude}`}
+            to={`/hotels/${id}?lat=${latitude}&lng=${longitude}`}
             className="flex flex-col items-center border rounded-lg shadow md:flex-row md:max-w-xl border-gray-700 bg-gray-800 hover:bg-gray-700"
             >
             <img
