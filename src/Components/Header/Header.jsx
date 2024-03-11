@@ -80,7 +80,7 @@ const Header = () => {
           <div
             id="DatePicker"
             ref={datePicker}
-            className="flex-between h-11 gap-2 relative"
+            className="flex-between font-MorabbaBold h-11 gap-2 relative"
           >
             <CalendarMonth className="text-blue-400" />
             <p onClick={() => setOpenDate(!openDate)}>
@@ -96,7 +96,7 @@ const Header = () => {
                 moveRangeOnFirstSelection={true}
                 ranges={date}
                 minDate={new Date()}
-                className="absolute top-12 z-20 bg-slate-200 border border-slate-600 p-2 rounded-lg"
+                className="absolute font-MorabbaBold top-12 z-20 bg-slate-200 border border-slate-600 p-2 rounded-lg"
               />
             )}
             <Divider
@@ -107,7 +107,7 @@ const Header = () => {
             />
           </div>
           {/* Drop Down */}
-          <div className="flex-center h-11 gap-2 relative cursor-pointer">
+          <div className="flex-center font-MorabbaBold h-11 gap-2 relative cursor-pointer">
             <div
               id="OptionDropdown"
               className="flex-center gap-1"
