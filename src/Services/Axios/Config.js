@@ -18,9 +18,9 @@ ApiRequest.interceptors.response.use(
         return response
     }),
     (error) => {
-        if(!axios.isCancel()){
-            toast.error(`${error.response.data.error}`)
-        }
+        // if(!axios.isCancel()){
+        //     toast.error(`${error.response.data.error}`)
+        // }
       
         return Promise.reject(error)
     }

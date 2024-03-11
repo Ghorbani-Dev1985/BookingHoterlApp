@@ -1,31 +1,75 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { useContext } from 'react'
-import useFetch from '../../Hooks/useFetch';
 import ApiRequest from '../../Services/Axios/Config';
+import toast from 'react-hot-toast';
 
 const BookmarkContext = createContext()
 
 const BookmarkProvider = ({children}) => {
      const [currentBookmark , setCurrentBookmark] = useState("")
-    const [isLoadingCurrentBookmark , setIsLoadingCurrentBookmark] = useState(false)
-    const { data: bookmarks , isLoading } = useFetch("bookmarks", '');
-    async function getBookmark(id) {
-      setIsLoadingCurrentBookmark(true)
-      setCurrentBookmark("")
-        const getHotelData = await ApiRequest(`bookmarks/${id}`)
+    const [bookmarks , setBookmarks] = useState([])
+    const [isLoading , setIsLoading] = useState(false)
+
+   useEffect(() => {
+      async function getBookmarkList() {
+        setIsLoading(true)
+        await ApiRequest("bookmarks")
         .then(response => {
-          setCurrentBookmark(response.data)
-          setIsLoadingCurrentBookmark(false)
+          setBookmarks(response.data)
+          setIsLoading(false)
         })
         .catch((error) =>{
-            if(error){
+              setIsLoading(false)
+           })
+      }
+      getBookmarkList()
+   }, [])
+
+    async function getBookmark(id) {
+      setIsLoading(true)
+      setCurrentBookmark("")
+        await ApiRequest(`bookmarks/${id}`)
+        .then(response => {
+          setCurrentBookmark(response.data)
+          setIsLoading(false)
+        })
+        .catch((error) =>{
               setCurrentBookmark("")
-              setIsLoadingCurrentBookmark(false)
-            }
+              setIsLoading(false)
+            
            })
     }
+    async function createBookmark(newBookmark) {
+      setIsLoading(true)
+        await ApiRequest.post('bookmarks' , newBookmark)
+        .then(response => {
+          console.log(response.data)
+          setCurrentBookmark(response.data)
+          setBookmarks(prev => [...prev , response.data])
+          setIsLoading(false)
+          toast.success("New location added to bookmark list")
+        })
+        .catch((error) =>{
+             toast.error(error.message)
+              setIsLoading(false)
+           })
+    }
+
+    async function deleteBookmark(id) {
+      setIsLoading(true)
+        await ApiRequest.delete(`bookmarks/${id}`)
+        setBookmarks(prev => prev.filter(bookmark => bookmark.id !== id))
+        
+
+        .catch(error => {
+          toast.error(error.message)
+          setIsLoading(false)
+        })
+    
+    }
+
   return (
-    <BookmarkContext.Provider value={{bookmarks , isLoading , currentBookmark , getBookmark, isLoadingCurrentBookmark}}>
+    <BookmarkContext.Provider value={{bookmarks , isLoading , currentBookmark , getBookmark , createBookmark , deleteBookmark}}>
         {children}
     </BookmarkContext.Provider>
   )
