@@ -76,6 +76,7 @@ const AddNewBookmark = () => {
         }
        await createBookmark(newBookmarkInfos)
        reset()
+       navigate('/bookmark')
       }
 
       if(isLoadingGeoCoding) return <CircularProgress />
@@ -88,7 +89,7 @@ const AddNewBookmark = () => {
         {/* CityName */}
             <label className='block mb-2'>CityName</label>
         <div className="relative">
-            <Domain className="absolute right-2.5 sm:right-3.5 top-2" />
+            <Domain className="absolute right-2.5 sm:right-3.5 top-2 text-gray-600" />
               <input
                 {...register("CityName", {
                   required: "CityName is required",
@@ -113,7 +114,7 @@ const AddNewBookmark = () => {
             {/* Country */}
             <label className='block mb-2'>Country</label>
         <div className="relative">
-          {countryCode ? <ReactCountryFlag svg countryCode={countryCode} className="absolute right-2.5 sm:right-3.5 top-3"/> : <Flag className="absolute right-2.5 sm:right-3.5 top-2" />} 
+          {countryCode ? <ReactCountryFlag svg countryCode={countryCode} className="absolute right-2.5 sm:right-3.5 top-3"/> : <Flag className="absolute right-2.5 sm:right-3.5 top-2 text-gray-600" />} 
             
               <input
                 {...register("Country", {

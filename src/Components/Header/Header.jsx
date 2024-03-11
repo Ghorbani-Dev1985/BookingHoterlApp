@@ -13,7 +13,7 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
-import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 
 const Header = () => {
   const [searchParams , setSearchParams] = useSearchParams()
@@ -58,7 +58,8 @@ const Header = () => {
   return (
     <header>
       <div className="container">
-        <div className="flex-between my-4 border border-gray-700 p-5 rounded-xl">
+        <div className="flex flex-col my-4 border border-gray-700 p-5 rounded-xl">
+          <div className="flex-between">
           {/* Search Input */}
           <div className="flex-between gap-2">
             <FmdGood className="text-rose-500" />
@@ -141,6 +142,16 @@ const Header = () => {
               <Search />
             </button>
           </div>
+          </div>
+        <Divider className="border-gray-600 my-4"/>
+        <div className="flex-center gap-5">
+          <Link to="/bookmark" className="border-b border-b-orange-400 py-1 px-2">
+            Bookmark
+          </Link>
+          <Link to="/login" className="border-b border-b-orange-400 py-1 px-2">
+            Login
+          </Link>
+        </div>
         </div>
       </div>
     </header>

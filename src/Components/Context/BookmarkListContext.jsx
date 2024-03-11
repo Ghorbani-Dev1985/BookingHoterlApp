@@ -9,8 +9,8 @@ const BookmarkContext = createContext()
 const initialState = {
   bookmarks : [],
   isLoading : false,
-  currentBookmark : "",
-  error: ""
+  currentBookmark : {},
+  error: {}
 }
 
 function BookmarkReducer(state = initialState, action) {
@@ -24,28 +24,33 @@ function BookmarkReducer(state = initialState, action) {
       return {
         ...state,
         isLoading : false,
-        bookmarks : action.payload
+        bookmarks : action.payload,
       }
     case "bookmark/loaded":
       return {
         ...state,
-        currentBookmark : action.payload
+        isLoading: false,
+        currentBookmark : action.payload,
       }
       case "bookmark/created":
       return {
         ...state,
-        currentBookmark : action.payload
+        isLoading: false,
+        bookmarks : [...state.bookmarks , action.payload],
+        currentBookmark: action.payload,
       }
       case "bookmark/deleted":
       return {
         ...state,
-        currentBookmark : action.payload
+        isLoading: false,
+        bookmarks : state.bookmarks.filter((item) => item.id !== action.payload),
+        currentBookmark: {},
       }
       case "rejected":
       return {
         ...state,
         isLoading: false,
-        error: action.error
+        error: action.error,
       }
     default:
       throw new Error("Unknown action")
@@ -76,44 +81,37 @@ const BookmarkProvider = ({children}) => {
    }, [])
 
     async function getBookmark(id) {
+      if (+id === +currentBookmark?.id) return
       dispatch({type : "loading"})
-      setCurrentBookmark("")
         await ApiRequest(`bookmarks/${id}`)
         .then(response => {
-          setCurrentBookmark(response.data)
-          setIsLoading(false)
+          dispatch({type: "bookmark/loaded" , payload : response.data})
         })
         .catch((error) =>{
-              setCurrentBookmark("")
-              setIsLoading(false)
-            
+          dispatch({type : "rejected" , payload: error.message})
            })
     }
     async function createBookmark(newBookmark) {
-      setIsLoading(true)
+      dispatch({type : "loading"})
         await ApiRequest.post('bookmarks' , newBookmark)
         .then(response => {
-          console.log(response.data)
-          setCurrentBookmark(response.data)
-          setBookmarks(prev => [...prev , response.data])
-          setIsLoading(false)
+          dispatch({type : "bookmark/created" , payload : response.data})
           toast.success("New location added to bookmark list")
         })
         .catch((error) =>{
-             toast.error(error.message)
-              setIsLoading(false)
+          dispatch({type : "rejected" , payload: error.message})
            })
     }
 
     async function deleteBookmark(id) {
-      setIsLoading(true)
+      dispatch({type : "loading"})
         await ApiRequest.delete(`bookmarks/${id}`)
-        setBookmarks(prev => prev.filter(bookmark => bookmark.id !== id))
-        
-
+        .then(response => {
+          dispatch({type : "bookmark/deleted" , payload : id})
+          toast.success("Location removed from bookmark list")
+        })
         .catch(error => {
-          toast.error(error.message)
-          setIsLoading(false)
+          dispatch({type : "rejected" , payload: error.message})
         })
     
     }
