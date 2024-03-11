@@ -1,32 +1,82 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useReducer, useState } from 'react'
 import { useContext } from 'react'
 import ApiRequest from '../../Services/Axios/Config';
 import toast from 'react-hot-toast';
 
 const BookmarkContext = createContext()
 
+
+const initialState = {
+  bookmarks : [],
+  isLoading : false,
+  currentBookmark : "",
+  error: ""
+}
+
+function BookmarkReducer(state = initialState, action) {
+  switch (action.type) {
+    case "loading":
+      return {
+        ...state,
+        isLoading: true,
+      }
+    case "bookmarks/loaded":
+      return {
+        ...state,
+        isLoading : false,
+        bookmarks : action.payload
+      }
+    case "bookmark/loaded":
+      return {
+        ...state,
+        currentBookmark : action.payload
+      }
+      case "bookmark/created":
+      return {
+        ...state,
+        currentBookmark : action.payload
+      }
+      case "bookmark/deleted":
+      return {
+        ...state,
+        currentBookmark : action.payload
+      }
+      case "rejected":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error
+      }
+    default:
+      throw new Error("Unknown action")
+  }
+}
+
+
+
 const BookmarkProvider = ({children}) => {
-     const [currentBookmark , setCurrentBookmark] = useState("")
-    const [bookmarks , setBookmarks] = useState([])
-    const [isLoading , setIsLoading] = useState(false)
+    //  const [currentBookmark , setCurrentBookmark] = useState("")
+    // const [bookmarks , setBookmarks] = useState([])
+    // const [isLoading , setIsLoading] = useState(false)
+ 
+   const [{bookmarks , isLoading , currentBookmark} , dispatch] = useReducer(BookmarkReducer , initialState)
 
    useEffect(() => {
       async function getBookmarkList() {
-        setIsLoading(true)
+        dispatch({type : "loading"})
         await ApiRequest("bookmarks")
         .then(response => {
-          setBookmarks(response.data)
-          setIsLoading(false)
+          dispatch({type : "bookmarks/loaded" , payload : response.data})
         })
         .catch((error) =>{
-              setIsLoading(false)
+            dispatch({type : "rejected" , payload: error.message})
            })
       }
       getBookmarkList()
    }, [])
 
     async function getBookmark(id) {
-      setIsLoading(true)
+      dispatch({type : "loading"})
       setCurrentBookmark("")
         await ApiRequest(`bookmarks/${id}`)
         .then(response => {
