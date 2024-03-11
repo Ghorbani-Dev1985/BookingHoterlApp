@@ -3,6 +3,7 @@ import {
   Add,
   CalendarMonth,
   FmdGood,
+  Logout,
   RadioButtonChecked,
   Remove,
   Search,
@@ -14,12 +15,14 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { Link, createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../Context/AuthProvider";
 
 const Header = () => {
   const [searchParams , setSearchParams] = useSearchParams()
   const [destination, setDestination] = useState(searchParams.get("destination") || "");
   const [openOption, setOpenOption] = useState(false);
   const [openDate, setOpenDate] = useState(false);
+  const {user ,logout , isAuthenticated} = useAuth()
   const datePicker = useRef();
   useOutsideClick(datePicker, "DatePicker", () => setOpenDate(false));
   const navigate = useNavigate()
@@ -55,6 +58,7 @@ const Header = () => {
         search: encodedParams.toString(),
      })
   }
+  console.log(user)
   return (
     <header>
       <div className="container">
@@ -149,7 +153,10 @@ const Header = () => {
             Bookmark
           </Link>
           <Link to="/login" className="border-b border-b-orange-400 py-1 px-2">
-            Login
+            {isAuthenticated ? <button onClick={() => {
+              logout()
+              navigate('/')
+            }}><span className="text-emerald-500">{user.name}</span><Logout className="ml-2"/></button> : "Login"} 
           </Link>
         </div>
         </div>

@@ -12,10 +12,12 @@ import Bookmark from "./Components/Bookmark/Bookmark";
 import SingleBookmark from "./Components/SingleBookmark/SingleBookmark";
 import AddNewBookmark from "./Components/AddNewBookmark/AddNewBookmark";
 import Login from "./Components/Login/Login";
+import AuthProvider from "./Components/Context/AuthProvider";
 
 function App() {
   return (
     <>
+    <AuthProvider>
      <BookmarkProvider>
       <HotelsProvider>
         <Toaster />
@@ -35,6 +37,7 @@ function App() {
         </Routes>
       </HotelsProvider>
      </BookmarkProvider>
+    </AuthProvider>
     </>
   );
 }

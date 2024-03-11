@@ -1,10 +1,11 @@
-import { createContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext()
 
 const initialState = {
     user : null,
-    isAthenticated : false,
+    isAuthenticated : false,
 }
 
 function authReducer(state , action){
@@ -13,13 +14,13 @@ function authReducer(state , action){
             return {
                 ...state,
                 user : action.payload.user,
-                isAthenticated : true
+                isAuthenticated : true
             }
         case "logout":
             return {
                 ...state,
                 user : null,
-                isAthenticated : false
+                isAuthenticated : false
             }
         default:
           throw new Error("Unknown action")
@@ -28,20 +29,19 @@ function authReducer(state , action){
 
 const FAKE_USER = {
     name: "Mohammad Ghorbani",
-    email: "user@gmail.com",
+    email: "ghorbani.dev1985@gmail.com",
     password:"ghorbaniDev@1"
 }
 
-export default function AuthContextProvider({children}){
-   const [{user , isAthenticated} , dispatch] = useReducer(authReducer , initialState)
-
+export default function AuthProvider({children}){
+   const [{user , isAuthenticated} , dispatch] = useReducer(authReducer , initialState)
 function login(email , password){
     if(email === FAKE_USER.email && password === FAKE_USER.password){
         dispatch({
             type : "login",
             payload : {
                 user : FAKE_USER,
-                isAthenticated : true
+                isAuthenticated : true
             }
         })
     }
@@ -54,5 +54,9 @@ function logout(){
 }
 
 
-     return <AuthContext.Provider value={{user , isAthenticated , login , logout}}>{children}</AuthContext.Provider>
+     return <AuthContext.Provider value={{user , isAuthenticated , login , logout}}>{children}</AuthContext.Provider>
+}
+
+export function useAuth(){
+    return useContext(AuthContext)
 }
