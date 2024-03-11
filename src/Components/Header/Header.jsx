@@ -58,7 +58,7 @@ const Header = () => {
         search: encodedParams.toString(),
      })
   }
-  console.log(user)
+
   return (
     <header>
       <div className="container">
